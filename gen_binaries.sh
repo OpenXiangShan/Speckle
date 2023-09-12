@@ -15,7 +15,7 @@ CONFIG=riscv
 CONFIGFILE=${CONFIG}.cfg
 RUN="spike pk -c "
 CMD_FILE=commands.txt
-INPUT_TYPE=test
+INPUT_TYPE=ref
 
 # idiomatic parameter and option handling in sh
 compileFlag=false
