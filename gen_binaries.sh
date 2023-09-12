@@ -95,11 +95,11 @@ if [ "$compileFlag" = true ]; then
       fi
       BMK_DIR=$SPEC_DIR/benchspec/CPU2006/$b/run/run_base_${INPUT_TYPE}_${CONFIG}.0000;
       
-      echo ""
-      echo "ls $SPEC_DIR/benchspec/CPU2006/$b/run"
-      ls $SPEC_DIR/benchspec/CPU2006/$b/run
-      ls $SPEC_DIR/benchspec/CPU2006/$b/run/run_base_${INPUT_TYPE}_${CONFIG}.0000
-      echo ""
+      # echo ""
+      # echo "ls $SPEC_DIR/benchspec/CPU2006/$b/run"
+      # ls $SPEC_DIR/benchspec/CPU2006/$b/run
+      # ls $SPEC_DIR/benchspec/CPU2006/$b/run/run_base_${INPUT_TYPE}_${CONFIG}.0000
+      # echo ""
 
       # make a symlink to SPEC (to prevent data duplication for huge input files)
       echo "ln -sf $BMK_DIR $BUILD_DIR/${b}_${INPUT_TYPE}"
