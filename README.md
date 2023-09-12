@@ -9,6 +9,38 @@
    - you must have built the tools in SPEC CPU2006 v1.2 (see below for help). 
 
 
+**TLDR: Build Steps (Tested on Ubuntu 20.04 with RISC-V GCC 12.2.0)**
+
+```bash
+# Step 1: build the SPEC tools
+# This directory can be read-only.
+# For BOSC users, please use /nfs-nvme/home/share/cpu2006-1.2
+cd /path/to/cpu2006-1.2
+
+# This step will ask for an installation path for the tools.
+# Please enter a LOCAL storage path, NOT NFS storage.
+# For BOSC users, please use local disks, e.g. `/local`.
+./install.sh
+
+# Step 2: unset proxy environment variables
+# SPEC scripts fail when detecting a wrong proxy.
+unset http_proxy https_proxy
+
+# Step 3: use this wrapper repo to build SPEC CPU2006
+# Set the environment variable to where you install the tools in Step 1.
+export SPEC_DIR=/path/to/your/local/installation
+
+# Call the build script for building SPECint or SPECfp.
+# Currently they have to be built separately.
+# It seems the compilation has only one working process without parallelism.
+# This step may require several minutes to finish.
+./gen_binaries.sh --compile --copy
+./gen_binaries.sh --compile --copy -fp
+
+# Step 4: check the outputs
+ls -lh riscv-spec-ref
+```
+
 **Details**
 
    We will compile the binaries "in vivo", calling into the actual SPEC CPU2006
