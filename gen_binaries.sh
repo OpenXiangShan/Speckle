@@ -17,13 +17,11 @@ RUN="spike pk -c "
 CMD_FILE=commands.txt
 INPUT_TYPE=test
 
-# the integer set
-BENCHMARKS=(400.perlbench 401.bzip2 403.gcc 429.mcf 445.gobmk 456.hmmer 458.sjeng 462.libquantum 464.h264ref 471.omnetpp 473.astar 483.xalancbmk)
-
 # idiomatic parameter and option handling in sh
 compileFlag=false
 runFlag=false
 copyFlag=false
+fpFlag=false
 while test $# -gt 0
 do
    case "$1" in
@@ -35,6 +33,9 @@ do
             ;;
         --copy)
             copyFlag=true
+            ;;
+        --fp)
+            fpFlag=true
             ;;
         --*) echo "ERROR: bad option $1"
             echo "  --compile (compile the SPEC benchmarks), --run (to run the benchmarks) --copy (copies, not symlinks, benchmarks to a new dir)"
@@ -48,12 +49,21 @@ do
     shift
 done
 
+if [ "$fpFlag" = true ]; then
+BENCHMARKS=(410.bwaves 416.gamess 433.milc 434.zeusmp 435.gromacs 436.cactusADM 437.leslie3d 444.namd 447.dealII 450.soplex 453.povray 454.calculix 459.GemsFDTD 465.tonto 470.lbm 481.wrf 482.sphinx3)
+RUNSPEC_OPT=fp
+else
+BENCHMARKS=(400.perlbench 401.bzip2 403.gcc 429.mcf 445.gobmk 456.hmmer 458.sjeng 462.libquantum 464.h264ref 471.omnetpp 473.astar 483.xalancbmk)
+RUNSPEC_OPT=int
+fi
+
 echo "== Speckle Options =="
 echo "  Config : " ${CONFIG}
 echo "  Input  : " ${INPUT_TYPE}
 echo "  compile: " $compileFlag
 echo "  run    : " $runFlag
 echo "  copy   : " $copyFlag
+echo "  is_fp  : " $fpFlag
 echo ""
 
 
@@ -66,7 +76,7 @@ if [ "$compileFlag" = true ]; then
    echo "Compiling SPEC..."
    # copy over the config file we will use to compile the benchmarks
    cp $BUILD_DIR/../${CONFIGFILE} $SPEC_DIR/config/${CONFIGFILE}
-   cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup int
+   cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup ${RUNSPEC_OPT}
 #   cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action scrub int
 
    if [ "$copyFlag" = true ]; then
